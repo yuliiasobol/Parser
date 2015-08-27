@@ -35,6 +35,10 @@ namespace Parser
 				currentPageDoc = this.htmlWeb.Load(this.HostUrl);
 				currentArticles = currentPageDoc.DocumentNode.SelectNodes(this.ParseExpression);
 				var filteredarticles = currentArticles.Where(n => n.ChildNodes[1].InnerText.Contains(this.FoundWorlds.First())).Select(n => n.ChildNodes[0].InnerText).ToList();
+
+
+
+				///fdfdfdfd
 			}
 
 		}
