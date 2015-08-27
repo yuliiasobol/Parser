@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArticleData.cs" />
+    <Compile Include="Extentions.cs" />
     <Compile Include="ParseManager.cs" />
     <Compile Include="PdfFileManager.cs" />
     <Compile Include="Program.cs" />
