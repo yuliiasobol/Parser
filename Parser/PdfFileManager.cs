@@ -99,9 +99,7 @@ namespace Parser
 
 		}
 
-
-
-		public void WriteArticles(List<ArticleData> articlesCollections)
+		private void Write(ArticleData articleData)
 		{
 			PdfPTable table = new PdfPTable(1);
 
@@ -110,7 +108,7 @@ namespace Parser
 				BackgroundColor = iTextSharp.text.BaseColor.LIGHT_GRAY,
 				BorderColor = iTextSharp.text.BaseColor.DARK_GRAY,
 				BorderWidth = 1,
-				Phrase = new Phrase("Title", new iTextSharp.text.Font(this.CustomFonts, 24, iTextSharp.text.Font.NORMAL,
+				Phrase = new Phrase(articleData.Title, new iTextSharp.text.Font(this.CustomFonts, 24, iTextSharp.text.Font.NORMAL,
 						new BaseColor(System.Drawing.Color.Ivory))),
 				Padding = 5,
 				HorizontalAlignment = Element.ALIGN_CENTER,
@@ -122,7 +120,7 @@ namespace Parser
 				BackgroundColor = iTextSharp.text.BaseColor.LIGHT_GRAY,
 				BorderColor = iTextSharp.text.BaseColor.DARK_GRAY,
 				BorderWidth = 1,
-				Phrase = new Phrase("Lorem Ipsum - це текст-'риба', що використовується в друкарстві та дизайні. Lorem Ipsum є, фактично, стандартною 'рибою' аж з XVI сторіччя, коли невідомий друкар взяв шрифтову гранку та склав на ній підбірку зразків шрифтів. 'Риба' не тільки успішно пережила п'ять століть, але й прижилася в електронному верстуванні, залишаючись по суті незмінною. Вона популяризувалась в 60-их роках минулого сторіччя завдяки виданню зразків шрифтів Letraset, які містили уривки з LorLorem Ipsum - це текст-'риба', що використовується в друкарстві та дизайні. Lorem Ipsum є, фактично, стандартною 'рибою' аж з XVI сторіччя, коли невідомий друкар взяв шрифтову гранку та склав на ній підбірку зразків шрифтів. 'Риба' не тільки успішно пережила п'ять століть, але й прижилася в електронному верстуванні, залишаючись по суті незмінною. Вона популяризувалась в 60-их роках минулого сторіччя завдяки виданню зразків шрифтів Letraset, які містили уривки з Lor Lorem Ipsum - це текст-'риба', що використовується в друкарстві та дизайні. Lorem Ipsum є, фактично, стандартною 'рибою' аж з XVI сторіччя, коли невідомий друкар взяв шрифтову гранку та склав на ній підбірку зразків шрифтів. 'Риба' не тільки успішно пережила п'ять століть, але й прижилася в електронному верстуванні, залишаючись по суті незмінною. Вона популяризувалась в 60-их роках минулого сторіччя завдяки виданню зразків шрифтів Letraset, які містили уривки з Lorem Ipsum, і вдруге - нещодавно завдяки програмам комп'ютерного верстування на кшталт Aldus Pagemaker, які використовували різні версії Lorem Ipsum.", new iTextSharp.text.Font(this.CustomFonts, 14, iTextSharp.text.Font.NORMAL,
+				Phrase = new Phrase(articleData.Body, new iTextSharp.text.Font(this.CustomFonts, 14, iTextSharp.text.Font.NORMAL,
 						new BaseColor(System.Drawing.Color.Ivory))),
 				Padding = 5,
 				HorizontalAlignment = Element.ALIGN_LEFT,
@@ -149,10 +147,15 @@ namespace Parser
 
 
 			this.CurrentDocument.Add(table);
+		}
 
+
+		public void WriteArticles(List<ArticleData> articlesCollections)
+		{
+			foreach (var currentArticle in articlesCollections)
+				this.Write(currentArticle);
 
 			this.CurrentDocument.Close();
-
 		}
 	}
 }

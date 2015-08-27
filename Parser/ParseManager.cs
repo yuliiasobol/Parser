@@ -35,15 +35,14 @@ namespace Parser
 			{
 				currentPageDoc = this.htmlWeb.Load(this.HostUrl.f(i));
 				currentArticles = currentPageDoc.DocumentNode.SelectNodes(this.ParseExpression);
-				var filteredarticles = currentArticles.Where(n => n.ChildNodes[1].InnerText.Contains(this.FoundWorlds.First()))/*.Select(n => n.ChildNodes[0].InnerText)*/.ToList();
+				var filteredarticles =
+					currentArticles.Where(n => n.ChildNodes[1].InnerText.Contains(this.FoundWorlds.First())).ToList();
 
 
 				foreach (var current in filteredarticles)
 				{
 					ArticlesCollection.Add(new ArticleData(){Title = current.ChildNodes[1].InnerText, Body = current.ChildNodes[3].InnerText});
 				}
-
-
 			}
 		}
 	}

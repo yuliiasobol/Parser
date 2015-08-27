@@ -13,18 +13,10 @@ namespace Parser
 	{
 		static void Main(string[] args)
 		{
-
-            //using(StreamWriter writer= new  StreamWriter(@"C:\Users\v-ysobol\Desktop\myPDF.pdf"))
-            //{
-            //	writer.Write(firstSubmainNodeName[0]);
-            //}
-
-			//PdfFileManager.Write();
-
 			ParseManager parserManager = new ParseManager()
 			{
 				HostUrl = @"http://r3zslyr3zsl.owl.e.s55.ru.wbprx.com/page{0}/",
-				FoundWorlds = new List<string>() {"o"},
+				FoundWorlds = new List<string>() { "1" },
 				ParseExpression =
 					"//body/div[@id='layout']/div[@class='inner']/div[@class='content_left']/div[@class='posts_list']/div[@class='posts shortcuts_items']/div[@class='post shortcuts_item']",
 					PageNumCount = 2
@@ -33,7 +25,7 @@ namespace Parser
 
 			parserManager.Parse();
 
-			(new PdfFileManager()).WriteArticles(null);
+			(new PdfFileManager()).WriteArticles(parserManager.ArticlesCollection);
 
 
 			Console.ReadLine();
