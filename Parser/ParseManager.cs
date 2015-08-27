@@ -29,18 +29,22 @@ namespace Parser
 		{
 			HtmlDocument currentPageDoc = null;
 			HtmlNodeCollection currentArticles = null;
+			//List<string> filteredarticles = null;
 
-			for (int i = 0; i < this.PageNumCount; i++)
+			for (int i = 1; i < this.PageNumCount; i++)
 			{
-				currentPageDoc = this.htmlWeb.Load(this.HostUrl);
+				currentPageDoc = this.htmlWeb.Load(this.HostUrl.f(i));
 				currentArticles = currentPageDoc.DocumentNode.SelectNodes(this.ParseExpression);
-				var filteredarticles = currentArticles.Where(n => n.ChildNodes[1].InnerText.Contains(this.FoundWorlds.First())).Select(n => n.ChildNodes[0].InnerText).ToList();
+				var filteredarticles = currentArticles.Where(n => n.ChildNodes[1].InnerText.Contains(this.FoundWorlds.First()))/*.Select(n => n.ChildNodes[0].InnerText)*/.ToList();
 
 
+				foreach (var current in filteredarticles)
+				{
+					ArticlesCollection.Add(new ArticleData(){Title = current.ChildNodes[1].InnerText, Body = current.ChildNodes[3].InnerText});
+				}
 
-				///fdfdfdfd
+
 			}
-
 		}
 	}
 }

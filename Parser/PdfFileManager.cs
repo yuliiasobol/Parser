@@ -11,24 +11,58 @@ using System.Threading.Tasks;
 
 namespace Parser
 {
-	static class PdfFileManager
+	public class PdfFileManager
 	{
-		public static object Color { get; private set; }
-
-		public static void Write()
+		private Document currentDocument;
+		private Document CurrentDocument
 		{
-			var doc = new Document();
-			PdfWriter.GetInstance(doc, new FileStream(@"C:\Users\apen\Desktop\Document.pdf", FileMode.Create));
-			doc.Open();
+			get
+			{
+				if (this.currentDocument == null)
+				{
+					this.currentDocument = new Document();
+					PdfWriter.GetInstance(this.CurrentDocument, new FileStream(@"..\Sources\Document.pdf", FileMode.Create));
+					this.CurrentDocument.Open();
+				}
+				return this.currentDocument;
+			}
+		}
 
-			iTextSharp.text.Image jpg = iTextSharp.text.Image.GetInstance(@"C:\Users\apen\Desktop\images.jpg");
+		private BaseFont CustomFonts
+		{
+			get
+			{
+				string[] fontNames = { "Segoe UI.ttf", "Calibri.ttf", "Arial.ttf", "Tahoma.ttf" };
+				string fontFile = null;
+
+				foreach (string name in fontNames)
+				{
+					fontFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), name);
+					if (!File.Exists(fontFile))
+						fontFile = null;
+					else break;
+				}
+
+				if (fontFile == null)
+					throw new FileNotFoundException("Ни один шрифт не найден.");
+
+
+				FontFactory.Register(fontFile);
+				return BaseFont.CreateFont(fontFile, BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+
+			}
+		}
+
+
+
+		public void Write()
+		{
+			iTextSharp.text.Image jpg = iTextSharp.text.Image.GetInstance(@"..\Sources\images.jpg");
 			jpg.Alignment = Element.ALIGN_CENTER;
-			doc.Add(jpg);
+			this.CurrentDocument.Add(jpg);
 
 			PdfPTable table = new PdfPTable(3);
-			PdfPCell cell = new PdfPCell(new Phrase("Simple table",
-			  new iTextSharp.text.Font(iTextSharp.text.Font.FontFamily.TIMES_ROMAN, 16,
-			  iTextSharp.text.Font.NORMAL, new BaseColor(System.Drawing.Color.Orange))));
+			PdfPCell cell = new PdfPCell(new Phrase("Simple table", new iTextSharp.text.Font(iTextSharp.text.Font.FontFamily.TIMES_ROMAN, 16, iTextSharp.text.Font.NORMAL, new BaseColor(System.Drawing.Color.Orange))));
 			cell.BackgroundColor = new BaseColor(System.Drawing.Color.Wheat);
 			cell.Padding = 5;
 			cell.Colspan = 3;
@@ -40,7 +74,7 @@ namespace Parser
 			table.AddCell("Col 1 Row 2");
 			table.AddCell("Col 2 Row 2");
 			table.AddCell("Col 3 Row 2");
-			jpg = iTextSharp.text.Image.GetInstance(@"C:\Users\apen\Desktop\left.jpg");
+			jpg = iTextSharp.text.Image.GetInstance(@"..\Sources\left.jpg");
 			cell = new PdfPCell(jpg);
 			cell.Padding = 5;
 			cell.HorizontalAlignment = PdfPCell.ALIGN_LEFT;
@@ -49,13 +83,75 @@ namespace Parser
 			cell.VerticalAlignment = PdfPCell.ALIGN_MIDDLE;
 			cell.HorizontalAlignment = PdfPCell.ALIGN_CENTER;
 			table.AddCell(cell);
-			jpg = iTextSharp.text.Image.GetInstance(@"C:\Users\apen\Desktop\right.jpg");
+
+
+			jpg = iTextSharp.text.Image.GetInstance(@"..\Sources\right.jpg");
 			cell = new PdfPCell(jpg);
 			cell.Padding = 5;
 			cell.HorizontalAlignment = PdfPCell.ALIGN_RIGHT;
 			table.AddCell(cell);
-			doc.Add(table);
-			doc.Close();
+
+
+			this.CurrentDocument.Add(table);
+
+
+			this.CurrentDocument.Close();
+
+		}
+
+
+
+		public void WriteArticles(List<ArticleData> articlesCollections)
+		{
+			PdfPTable table = new PdfPTable(1);
+
+			PdfPCell titleCell = new PdfPCell()
+			{
+				BackgroundColor = iTextSharp.text.BaseColor.LIGHT_GRAY,
+				BorderColor = iTextSharp.text.BaseColor.DARK_GRAY,
+				BorderWidth = 1,
+				Phrase = new Phrase("Title", new iTextSharp.text.Font(this.CustomFonts, 24, iTextSharp.text.Font.NORMAL,
+						new BaseColor(System.Drawing.Color.Ivory))),
+				Padding = 5,
+				HorizontalAlignment = Element.ALIGN_CENTER,
+				VerticalAlignment = Element.ALIGN_CENTER
+			};
+
+			PdfPCell bodyCell = new PdfPCell()
+			{
+				BackgroundColor = iTextSharp.text.BaseColor.LIGHT_GRAY,
+				BorderColor = iTextSharp.text.BaseColor.DARK_GRAY,
+				BorderWidth = 1,
+				Phrase = new Phrase("Lorem Ipsum - це текст-'риба', що використовується в друкарстві та дизайні. Lorem Ipsum є, фактично, стандартною 'рибою' аж з XVI сторіччя, коли невідомий друкар взяв шрифтову гранку та склав на ній підбірку зразків шрифтів. 'Риба' не тільки успішно пережила п'ять століть, але й прижилася в електронному верстуванні, залишаючись по суті незмінною. Вона популяризувалась в 60-их роках минулого сторіччя завдяки виданню зразків шрифтів Letraset, які містили уривки з LorLorem Ipsum - це текст-'риба', що використовується в друкарстві та дизайні. Lorem Ipsum є, фактично, стандартною 'рибою' аж з XVI сторіччя, коли невідомий друкар взяв шрифтову гранку та склав на ній підбірку зразків шрифтів. 'Риба' не тільки успішно пережила п'ять століть, але й прижилася в електронному верстуванні, залишаючись по суті незмінною. Вона популяризувалась в 60-их роках минулого сторіччя завдяки виданню зразків шрифтів Letraset, які містили уривки з Lor Lorem Ipsum - це текст-'риба', що використовується в друкарстві та дизайні. Lorem Ipsum є, фактично, стандартною 'рибою' аж з XVI сторіччя, коли невідомий друкар взяв шрифтову гранку та склав на ній підбірку зразків шрифтів. 'Риба' не тільки успішно пережила п'ять століть, але й прижилася в електронному верстуванні, залишаючись по суті незмінною. Вона популяризувалась в 60-их роках минулого сторіччя завдяки виданню зразків шрифтів Letraset, які містили уривки з Lorem Ipsum, і вдруге - нещодавно завдяки програмам комп'ютерного верстування на кшталт Aldus Pagemaker, які використовували різні версії Lorem Ipsum.", new iTextSharp.text.Font(this.CustomFonts, 14, iTextSharp.text.Font.NORMAL,
+						new BaseColor(System.Drawing.Color.Ivory))),
+				Padding = 5,
+				HorizontalAlignment = Element.ALIGN_LEFT,
+				VerticalAlignment = Element.ALIGN_LEFT
+			};
+
+			PdfPCell footerCell = new PdfPCell()
+			{
+				BackgroundColor = iTextSharp.text.BaseColor.LIGHT_GRAY,
+				BorderColor = iTextSharp.text.BaseColor.DARK_GRAY,
+				BorderWidth = 1,
+				Phrase = new Phrase("footer(c)", new iTextSharp.text.Font(this.CustomFonts, 14, iTextSharp.text.Font.NORMAL,
+						new BaseColor(System.Drawing.Color.Ivory))),
+				Padding = 5,
+				HorizontalAlignment = Element.ALIGN_CENTER,
+				VerticalAlignment = Element.ALIGN_CENTER
+			};
+
+
+			table.AddCell(titleCell);
+
+			table.AddCell(bodyCell);
+			table.AddCell(footerCell);
+
+
+			this.CurrentDocument.Add(table);
+
+
+			this.CurrentDocument.Close();
 
 		}
 	}

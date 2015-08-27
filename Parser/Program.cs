@@ -14,23 +14,6 @@ namespace Parser
 		static void Main(string[] args)
 		{
 
-
-			//int lastPageNum = 100;
-
-			//var webGet = new HtmlWeb() { AutoDetectEncoding = false };
-			//var doc = webGet.Load("http://r3zslyr3zsl.owl.e.s55.ru.wbprx.com/");
-
-			//List<string> listResults=new List<string>();
-
-
-			//HtmlNodeCollection articles =
-			//	doc.DocumentNode.SelectNodes(
-			//		"//body/div[@id='layout']/div[@class='inner']/div[@class='content_left']/div[@class='posts_list']/div[@class='posts shortcuts_items']/div[@class='post shortcuts_item']");/*/h1[@class='title']*/
-
-
-			//var firstSubmainNodeName = articles.Where(n => n.ChildNodes[1].InnerText.Contains("Оптимизация")).Select(n => n.ChildNodes[0].InnerText).ToList();
-
-
             //using(StreamWriter writer= new  StreamWriter(@"C:\Users\v-ysobol\Desktop\myPDF.pdf"))
             //{
             //	writer.Write(firstSubmainNodeName[0]);
@@ -40,14 +23,17 @@ namespace Parser
 
 			ParseManager parserManager = new ParseManager()
 			{
-				HostUrl = "http://r3zslyr3zsl.owl.e.s55.ru.wbprx.com/",
-				FoundWorlds = new List<string>() {"Оптимизация"},
+				HostUrl = @"http://r3zslyr3zsl.owl.e.s55.ru.wbprx.com/page{0}/",
+				FoundWorlds = new List<string>() {"o"},
 				ParseExpression =
-					"//body/div[@id='layout']/div[@class='inner']/div[@class='content_left']/div[@class='posts_list']/div[@class='posts shortcuts_items']/div[@class='post shortcuts_item']"
+					"//body/div[@id='layout']/div[@class='inner']/div[@class='content_left']/div[@class='posts_list']/div[@class='posts shortcuts_items']/div[@class='post shortcuts_item']",
+					PageNumCount = 2
 			};
 
 
+			parserManager.Parse();
 
+			(new PdfFileManager()).WriteArticles(null);
 
 
 			Console.ReadLine();
