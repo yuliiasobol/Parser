@@ -12,7 +12,6 @@ namespace Parser
         public string Body { get; set; }
         public List<Uri> ImagesColletion { get; set; }
         public List<string> CodeSnippetCollection { get; set; }
-	   /////dssdesds
-	   //dsdsds
+	 
     }
 }
